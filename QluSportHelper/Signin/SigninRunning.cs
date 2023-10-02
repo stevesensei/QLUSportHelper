@@ -65,8 +65,8 @@ public class SigninRunning
             switch (JsonMapper.ToObject<SigninData>(encoding.GetString(response.RawBytes)).code)
             {
                 case 500:
-                    _logger.Error("获取路线达到上限!");
-                    await GetMap();
+                    _logger.Error("获取路线达到上限!请明天再来吧");
+                    //await GetMap();
                     break;
                 case -10001:
                     _logger.Error("Token过期或出现错误,请检查或删除文件重新获取");
@@ -117,7 +117,7 @@ public class SigninRunning
         }
     }
 
-    public async Task StartTimer(List<Line2> lines)
+    public Task StartTimer(List<Line2> lines)
     {
         Random random = new Random();
         for (int i = 0; i < lines.Count; i++)
@@ -171,5 +171,7 @@ public class SigninRunning
                 }
             });
         }
+
+        return Task.CompletedTask;
     }
 }

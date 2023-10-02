@@ -8,6 +8,7 @@ public class MainProgram
     private static readonly log4net.ILog logger = log4net.LogManager.GetLogger("主程序");
     public static async Task Main(String[] args)
     {
+        Console.Title = "QLU Sport Helper - Welcome";
         //情怀
         PrintIntro();
         CheckTokenFile();
@@ -47,7 +48,7 @@ public class MainProgram
                 logger.Warn("4.请退出杀毒软件,如果您不放心,这是查毒报告:");
                 logger.Warn("https://s.threatbook.com/report/file/719bc9c1546de3e1feb88b0c523e1d1fa022a1c9dac3030b6c96bff58c8e4c6e");
                 logger.Warn("=========Warning=========");
-                Console.WriteLine("请按任意键继续");
+                Console.WriteLine("请按Enter键继续");
                 Console.ReadLine();
                 Console.Clear();
                 logger.Warn("请在接下来弹出的提示框中选择 是 ,并允许防火墙,否则将无法抓取");
