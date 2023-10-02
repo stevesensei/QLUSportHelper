@@ -58,15 +58,18 @@ public class SigninRunning
         req.AddHeader("Token", Token);
         req.AddHeader("Referer", "https://servicewechat.com/wx5069fcccc8151ce3/28/page-frame.html");
         //添加请求数据
-        req.AddJsonBody(JsonMapper.ToJson(_position), ContentType.FormUrlEncoded);
+        req.AddParameter("lat", _position.lat);
+        req.AddParameter("lng", _position.lng);
+        //Console.WriteLine(JsonMapper.ToJson(_position));
         var response = await _client.ExecutePostAsync(req, CancellationToken.None);
         if (response.IsSuccessStatusCode)
         {
             switch (JsonMapper.ToObject<SigninData>(encoding.GetString(response.RawBytes)).code)
             {
                 case 500:
+                    //Console.WriteLine(encoding.GetString(response.RawBytes));
                     _logger.Error("获取路线达到上限!请明天再来吧");
-                    //await GetMap();
+                    await GetMap();
                     break;
                 case -10001:
                     _logger.Error("Token过期或出现错误,请检查或删除文件重新获取");
@@ -96,7 +99,7 @@ public class SigninRunning
             {
                 _logger.Info(String.Format("欢迎,{0}同学",data.data.user.name));
                 _logger.Info("==========================================");
-                _logger.Info(String.Format("本次打卡共{0}米,以下是本次打卡的信息:",data.data.line.distence));
+                _logger.Info(String.Format("本次打卡共{0}米,以下是本次打卡的信息:",data.data.line.total));
                 _logger.Info("------------------------------------");
                 foreach (var point in data.data.line.lines)
                 {
@@ -148,11 +151,19 @@ public class SigninRunning
                 data.bs_id = "";
                 data.bs_name = "";
                 data.id = lines[index].id.ToString();
-                req.AddJsonBody(JsonMapper.ToJson(data));
-                Console.WriteLine(JsonMapper.ToJson(data));
+                //req.AddJsonBody(JsonMapper.ToJson(data));
+                req.AddParameter("ble", "false");
+                req.AddParameter("gps", "false");
+                req.AddParameter("lat", lines[index].lat.ToString());
+                req.AddParameter("lng", lines[index].lng.ToString());
+                req.AddParameter("id", lines[index].id.ToString());
+                req.AddParameter("bs_id", "");
+                req.AddParameter("bs_name", "");
+                //Console.WriteLine(JsonMapper.ToJson(data));
                 var response = _client.ExecutePost(req);
                 if (response.IsSuccessStatusCode)
                 {
+                    //Console.WriteLine(encoding.GetString(response.RawBytes));
                     //尼玛为什么这个Data会返回字符串啊
                     switch (JsonMapper.ToObject<SigninDataDaka>(encoding.GetString(response.RawBytes)).code)
                     {
