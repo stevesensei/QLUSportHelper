@@ -12,6 +12,7 @@
       <PackageReference Include="LitJson" Version="0.18.0" />
       <PackageReference Include="log4net" Version="2.0.15" />
       <PackageReference Include="log4net.Ext.Json" Version="2.0.10.1" />
+      <PackageReference Include="RestSharp" Version="110.2.1-alpha.0.13" />
       <PackageReference Include="System.Reactive" Version="6.0.1-preview.1" />
     </ItemGroup>
 

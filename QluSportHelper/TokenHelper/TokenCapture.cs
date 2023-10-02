@@ -17,9 +17,12 @@ public class TokenCapture
         FiddlerApplication.Startup(config);
         InstallCertificate();
         _logger.Warn("证书安装成功!注意此时您无法正常浏览网页,抓取结束后方可恢复");
-        _logger.Info("接下来请登录微信,打开觅幂小程序,随意点击几处,程序将自动抓取token");
+        _logger.Info("成功打开代理服务器!");
+        _logger.Warn("=========Warning=========");
+        _logger.Warn("接下来请在登录界面点击右上角的小齿轮,开启使用代理,地址和端口分别填入127.0.0.1和8998随后");
+        _logger.Warn("请登录微信,打开觅幂小程序,随意点击几处,程序将自动抓取token");
+        _logger.Warn("=========Warning=========");
         FiddlerApplication.BeforeRequest += CaptureToken;
-
     }
 
     public void Uninstall()
@@ -62,12 +65,16 @@ public class TokenCapture
                 _logger.Warn("请在下一步的移除窗口中选择确定,否则将无法正确浏览网页!");
                 if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory , "token")))
                 {
-                    File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "token"));
+                    var str = File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "token"));
+                    str.Close();
                 }
+                Console.WriteLine(session.RequestHeaders["token"]);
                 File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "token"),session.RequestHeaders["token"]);
                 Uninstall();
                 Fiddler.FiddlerApplication.oProxy.Detach();
                 FiddlerApplication.Shutdown();
+                Console.Clear();
+                MainProgram.Main(null);
             }
         }
     }
