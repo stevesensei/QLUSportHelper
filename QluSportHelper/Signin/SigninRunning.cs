@@ -69,7 +69,7 @@ public class SigninRunning
                 case 500:
                     //Console.WriteLine(encoding.GetString(response.RawBytes));
                     _logger.Error("获取路线达到上限!请明天再来吧");
-                    await GetMap();
+                    //await GetMap();
                     break;
                 case -10001:
                     _logger.Error("Token过期或出现错误,请检查或删除文件重新获取");
